@@ -5,7 +5,7 @@
 class CNewtonController
 {
 public:
-  static unsigned int GetNewtonFractalsColor(long double cx, long double cy);
+  static uint32_t GetNewtonFractalsColor(long double cx, long double cy);
 };
 
 #endif
