@@ -17,17 +17,17 @@ INCLUDEPATH += inc
 
 SOURCES += \
     src/Commons.cpp \
-    src/MandelbrotController.cpp \
-    src/MandelbrotDlg.cpp \
-    src/NewtonController.cpp \
+    src/FractalsModel.cpp \
+    src/Mandelbrot.cpp \
+    src/Newton.cpp \
     src/main.cpp \
     src/mainwindow.cpp
 
 HEADERS += \
     inc/Commons.h \
-    inc/MandelbrotController.h \
-    inc/MandelbrotDlg.h \
-    inc/NewtonController.h \
+    inc/FractalsModel.h \
+    inc/Mandelbrot.h \
+    inc/Newton.h \
     inc/mainwindow.h
 
 FORMS += \

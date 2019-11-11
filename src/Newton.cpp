@@ -1,12 +1,12 @@
 #include <complex>
 
-#include "NewtonController.h"
+#include "Newton.h"
 #include "Commons.h"
 
 // f(x) = sin(x) - 1
 // f'(x) = cos(x)
-uint32_t CNewtonController::GetNewtonFractalsColor( long double zx,
-                                                    long double zy ) {
+uint32_t NewtonGetColor( long double zx,
+                         long double zy ) {
   uint32_t iterCount = 0;
   static const long double maxT = 1e+6l;
   static const long double minT = 1e-6l;
@@ -29,3 +29,14 @@ uint32_t CNewtonController::GetNewtonFractalsColor( long double zx,
   return result;
 }
 //////////////////////////////////////////////////////////////////////////
+
+void
+NewtonResetBounds(long double *lx,
+                  long double *rx,
+                  long double *ty,
+                  long double *by) {
+  *lx = -4.15L;
+  *by = -1.0L;
+  *rx = *ty = 1.0L;
+}
+///////////////////////////////////////////////////////
