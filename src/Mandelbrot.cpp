@@ -1,16 +1,19 @@
 #include "Mandelbrot.h"
 #include <math.h>
 
-#define MAX_MANDELBROT_ITERS 4000
+#define MAX_MANDELBROT_ITERS 0xff
 static uint32_t m_colorTable[MAX_MANDELBROT_ITERS + 1];
 
 static bool isInMainCardioid(long double x, long double y);
 
 void
 MandelbrotInitColorTable() {
-  uint32_t step = 0x00ffffff / MAX_MANDELBROT_ITERS;
-  for (uint32_t i = 0; i < MAX_MANDELBROT_ITERS; ++i)
-    m_colorTable[i] = 0xff000000 | (0x00ffffff - step*i);
+  double mid = static_cast<double>(MAX_MANDELBROT_ITERS);
+  for (uint32_t i = 0; i < MAX_MANDELBROT_ITERS; ++i) {
+    double f = sqrt(i / mid);
+    int intens = f * MAX_MANDELBROT_ITERS;
+    m_colorTable[i] = 0xff000000 | intens << 16 | intens << 8 | intens;
+  }
   m_colorTable[MAX_MANDELBROT_ITERS] = 0xff000000;
 }
 ///////////////////////////////////////////////////////
@@ -18,10 +21,16 @@ MandelbrotInitColorTable() {
 bool
 isInMainCardioid(long double x,
                  long double y) {
-  long double p = sqrtl((x-0.25l)*(x-0.25l) + y*y);
-  long double th = atan2l(y, x - 0.25l);
-  long double pc = 0.5l - 0.5l*cosl(th);
-  return p < pc;
+  long double q = (x-0.25l)*(x-0.25l) + y*y;
+  return q*(q+(x-0.25l)) <= 0.25l * y*y;
+// alternative 1.
+//  long double p = sqrtl((x-0.25l)*(x-0.25l) + y*y);
+//  long double th = atan2l(y, x - 0.25l);
+//  long double pc = 0.5l - 0.5l*cosl(th);
+//  return p < pc;
+// alternative 2.
+//  long double p = sqrtl((x-0.25l)*(x-0.25l) + y*y);
+//  return x <= p - 2.0l * p*p + 0.25l || (x+1.0l)*(x+1.0l) + y*y <= 1.0l / 16.0l;
 }
 ///////////////////////////////////////////////////////
 
@@ -34,7 +43,7 @@ MandelbrotGetColor(long double x0,
   long double  x, y;
   unsigned int ic = 0; //iterations count
   x = y = 0.0l;
-  if (isInMainCardioid(x, y))
+  if (isInMainCardioid(x0, y0))
     return m_colorTable[MAX_MANDELBROT_ITERS];
 
   /*

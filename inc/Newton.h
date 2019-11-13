@@ -2,6 +2,8 @@
 #define NEWTON_H
 #include <stdint.h>
 
+void NewtonInitColorTable();
+
 void NewtonResetBounds(long double *lx,
                        long double *rx,
                        long double *ty,

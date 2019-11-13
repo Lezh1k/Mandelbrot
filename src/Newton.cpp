@@ -3,6 +3,13 @@
 #include "Newton.h"
 #include "Commons.h"
 
+#define MAX_ITERS_COUNT 0xff
+
+void
+NewtonInitColorTable() {
+
+}
+
 // f(x) = sin(x) - 1
 // f'(x) = cos(x)
 uint32_t NewtonGetColor( long double zx,
@@ -15,17 +22,18 @@ uint32_t NewtonGetColor( long double zx,
   std::complex<long double> t = z;
   std::complex<long double> d = t;
 
-  while (iterCount < 0xff && abs(z) < maxT && abs(d) > minT) {
+  while (iterCount < MAX_ITERS_COUNT && abs(z) < maxT && abs(d) > minT) {
     z = z - sin(z) / cos(z);
     d = t-z;
     t = z;
     ++iterCount;
   }
 
-  uint32_t result = 0x00ffffff;
-  result &= ((iterCount * 8u) & 0xff) << 16u;
-  result &= ((iterCount * 7u) & 0xff) << 8u;
-  result &= (iterCount * 6u) & 0xff;
+  uint32_t result = 0;
+  result |= ((iterCount * 8u) & 0xff) << 16u;
+  result |= ((iterCount * 7u) & 0xff) << 8u;
+  result |= (iterCount * 6u) & 0xff;
+  result |= 0xff000000;
   return result;
 }
 //////////////////////////////////////////////////////////////////////////
@@ -40,3 +48,4 @@ NewtonResetBounds(long double *lx,
   *rx = *ty = 1.0L;
 }
 ///////////////////////////////////////////////////////
+

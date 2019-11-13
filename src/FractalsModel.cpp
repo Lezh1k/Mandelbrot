@@ -6,7 +6,8 @@
 FractalsModel::FractalsModel(uint32_t width,
                              uint32_t height) :
   m_width(width),
-  m_height(height) {
+  m_height(height),
+  m_data(nullptr) {
   m_data = new uint32_t[width*height];
 }
 ///////////////////////////////////////////////////////
@@ -28,9 +29,9 @@ FractalsModel::SetFractalType(FractalType t) {
 ///////////////////////////////////////////////////////
 
 void
-FractalsModel::SetCenter(uint32_t x,
-                         uint32_t y,
-                         bool grow) {
+FractalsModel::SetPOI(uint32_t x,
+                      uint32_t y,
+                      bool grow) {
   //  long double dx = p2p_distance(m_rx, m_lx) / m_width;
   //  long double dy = p2p_distance(m_ty, m_by) / m_height;
   long double dx = (m_rx - m_lx) / m_width;
@@ -62,9 +63,16 @@ FractalsModel::Update() {
   for (uint32_t yi = 0; yi < m_height; ++yi, y -= dy) {
     long double x = m_lx;
     for (uint32_t xi = 0; xi < m_width; ++xi, x += dx)
-       *d++ = m_pfGetColor(x, y);
+      *d++ = m_pfGetColor(x, y);
   }
 
-  //todo ^= 0xffffffff main axis
+  // invert colors for main axis
+  d = &m_data[m_width / 2];
+  for (uint32_t yi = 0; yi < m_height; ++yi, d += m_width)
+    *d ^= 0xffffffff;
+  d = &m_data[m_height/2 * m_width];
+  for (uint32_t xi = 0; xi < m_width; ++xi)
+    *d++ ^= 0xffffffff;
+  //
 }
 ///////////////////////////////////////////////////////
