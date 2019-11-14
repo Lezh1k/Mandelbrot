@@ -4,13 +4,13 @@
 
 void NewtonInitColorTable();
 
-void NewtonResetBounds(long double *lx,
-                       long double *rx,
-                       long double *ty,
-                       long double *by);
+void NewtonResetBounds(double *lx,
+                       double *rx,
+                       double *ty,
+                       double *by);
 
-uint32_t NewtonGetColor(long double cx,
-                        long double cy);
+uint32_t NewtonGetColor(double cx,
+                        double cy);
 
 
 #endif

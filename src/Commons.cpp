@@ -1,8 +1,8 @@
 #include "Commons.h"
 
-long double
-p2p_distance(long double a,
-             long double b) {
+double
+p2p_distance(double a,
+             double b) {
   return sqrt((a-b)*(a-b));
 }
 ///////////////////////////////////////////////////////

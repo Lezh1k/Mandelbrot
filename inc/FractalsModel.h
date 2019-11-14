@@ -8,13 +8,13 @@ enum FractalType {
   FT_NEWTON
 };
 
-typedef void (*pfResetBounds)(long double *lx,
-                              long double *rx,
-                              long double *ty,
-                              long double *by) ;
+typedef void (*pfResetBounds)(double *lx,
+                              double *rx,
+                              double *ty,
+                              double *by) ;
 
-typedef uint32_t (*pfGetColor)(long double x,
-                               long double y);
+typedef uint32_t (*pfGetColor)(double x,
+                               double y);
 
 class FractalsModel {
 public:
@@ -42,8 +42,8 @@ private:
   uint32_t m_height;
   uint32_t *m_data;
 
-  long double m_lx, m_rx; //left x, right x
-  long double m_ty, m_by; //top y, bottom y
+  double m_lx, m_rx; //left x, right x
+  double m_ty, m_by; //top y, bottom y
 
   pfResetBounds m_pfResetBounds; //bounds for different types of fractals are differ
   pfGetColor m_pfGetColor;

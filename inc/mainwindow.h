@@ -19,6 +19,7 @@ class MainWindow : public QMainWindow
 public:
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
+  virtual bool eventFilter(QObject *watched, QEvent *event);
 
 private:
   Ui::MainWindow *ui;
@@ -26,7 +27,8 @@ private:
   QImage m_img;
   FractalsModel *m_imgModel;
 
-private slots:
+  void DrawImg();
 
+private slots:
 };
 #endif // MAINWINDOW_H

@@ -12,15 +12,15 @@ NewtonInitColorTable() {
 
 // f(x) = sin(x) - 1
 // f'(x) = cos(x)
-uint32_t NewtonGetColor( long double zx,
-                         long double zy ) {
+uint32_t NewtonGetColor( double zx,
+                         double zy ) {
   uint32_t iterCount = 0;
-  static const long double maxT = 1e+6l;
-  static const long double minT = 1e-6l;
+  static const double maxT = 1e+6l;
+  static const double minT = 1e-6l;
   
-  std::complex<long double> z(zx, zy);
-  std::complex<long double> t = z;
-  std::complex<long double> d = t;
+  std::complex<double> z(zx, zy);
+  std::complex<double> t = z;
+  std::complex<double> d = t;
 
   while (iterCount < MAX_ITERS_COUNT && abs(z) < maxT && abs(d) > minT) {
     z = z - sin(z) / cos(z);
@@ -39,10 +39,10 @@ uint32_t NewtonGetColor( long double zx,
 //////////////////////////////////////////////////////////////////////////
 
 void
-NewtonResetBounds(long double *lx,
-                  long double *rx,
-                  long double *ty,
-                  long double *by) {
+NewtonResetBounds(double *lx,
+                  double *rx,
+                  double *ty,
+                  double *by) {
   *lx = -4.15L;
   *by = -1.0L;
   *rx = *ty = 1.0L;

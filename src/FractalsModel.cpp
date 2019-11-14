@@ -2,6 +2,7 @@
 #include "Mandelbrot.h"
 #include "Newton.h"
 #include "Commons.h"
+#include <omp.h>
 
 FractalsModel::FractalsModel(uint32_t width,
                              uint32_t height) :
@@ -32,13 +33,13 @@ void
 FractalsModel::SetPOI(uint32_t x,
                       uint32_t y,
                       bool grow) {
-  //  long double dx = p2p_distance(m_rx, m_lx) / m_width;
-  //  long double dy = p2p_distance(m_ty, m_by) / m_height;
-  long double dx = (m_rx - m_lx) / m_width;
-  long double dy = (m_ty - m_by) / m_height;
-  long double coef = grow ? 4.0l : 0.95l;
+  //  double dx = p2p_distance(m_rx, m_lx) / m_width;
+  //  double dy = p2p_distance(m_ty, m_by) / m_height;
+  double dx = (m_rx - m_lx) / m_width;
+  double dy = (m_ty - m_by) / m_height;
+  double coef = grow ? 4.0 : 0.95;
 
-  long double cx0, cy0;
+  double cx0, cy0;
   cx0 = m_lx + x*dx;
   cy0 = m_ty - y*dy;
 
@@ -52,22 +53,20 @@ FractalsModel::SetPOI(uint32_t x,
 
 void
 FractalsModel::Update() {
-  //  long double dx = p2p_distance(m_rx, m_lx) / m_width;
-  //  long double dy = p2p_distance(m_ty, m_by) / m_height;
-  long double dx = (m_rx - m_lx) / m_width;
-  long double dy = (m_ty - m_by) / m_height;
+  //  double dx = p2p_distance(m_rx, m_lx) / m_width;
+  //  double dy = p2p_distance(m_ty, m_by) / m_height;
+  double dx = (m_rx - m_lx) / m_width;
+  double dy = (m_ty - m_by) / m_height;
 
-  long double y = m_ty;
-  uint32_t *d = m_data;
-
-  for (uint32_t yi = 0; yi < m_height; ++yi, y -= dy) {
-    long double x = m_lx;
+  #pragma omp parallel for schedule(dynamic, 1)
+  for (uint32_t yi = 0; yi < m_height; ++yi) {
+    double x = m_lx;
     for (uint32_t xi = 0; xi < m_width; ++xi, x += dx)
-      *d++ = m_pfGetColor(x, y);
+      m_data[yi*m_width+xi] = m_pfGetColor(x, m_ty - yi*dy);
   }
 
   // invert colors for main axis
-  d = &m_data[m_width / 2];
+  uint32_t *d = &m_data[m_width / 2];
   for (uint32_t yi = 0; yi < m_height; ++yi, d += m_width)
     *d ^= 0xffffffff;
   d = &m_data[m_height/2 * m_width];
