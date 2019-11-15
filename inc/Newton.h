@@ -12,5 +12,12 @@ void NewtonResetBounds(double *lx,
 uint32_t NewtonGetColor(double cx,
                         double cy);
 
+void NewtonFillLine(double lx,
+                    double dx,
+                    double y,
+                    uint32_t yix,
+                    uint32_t width,
+                    uint32_t *dst);
+
 
 #endif

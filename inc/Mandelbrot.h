@@ -13,5 +13,12 @@ void MandelbrotResetBounds(double *lx,
 uint32_t MandelbrotGetColor(double x0,
                             double y0);
 
+void MandelbrotFillLine(double lx,
+                        double dx,
+                        double y,
+                        uint32_t yix,
+                        uint32_t width,
+                        uint32_t *dst);
+
 
 #endif

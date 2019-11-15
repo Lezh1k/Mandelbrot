@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
   ui->setupUi(this);
   m_imgModel = new FractalsModel(CANVAS_W, CANVAS_H);
-  m_imgModel->SetFractalType(FT_MANDELBROT);
+  m_imgModel->SetFractalType(FT_NEWTON);
   ui->m_lblCanvas->installEventFilter(this);
 
   DrawImg();
@@ -47,8 +47,8 @@ void
 MainWindow::DrawImg() {
   m_imgModel->Update();
   memcpy(static_cast<void*>(m_img.bits()),
-         static_cast<void*>(m_imgModel->Data()),
-         m_imgModel->DataLenBytes());
+         static_cast<const void*>(m_imgModel->Data()),
+         CANVAS_H * CANVAS_W * sizeof(uint32_t));
   ui->m_lblCanvas->setPixmap(QPixmap::fromImage(m_img));
 }
 ///////////////////////////////////////////////////////

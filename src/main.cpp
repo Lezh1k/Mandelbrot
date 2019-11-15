@@ -4,7 +4,8 @@
 #include "Mandelbrot.h"
 
 int
-main(int argc, char *argv[]) {
+main(int argc, char *argv[]) {  
+
   MandelbrotInitColorTable();
   QApplication a(argc, argv);
   MainWindow w;

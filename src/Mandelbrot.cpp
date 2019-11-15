@@ -15,10 +15,6 @@ MandelbrotInitColorTable() {
     m_colorTable[i] = 0xff000000 | intens << 16 | intens << 8 | intens;
   }
   m_colorTable[MAX_MANDELBROT_ITERS] = 0xff000000;
-//  uint32_t step = 0x00ffffff / MAX_MANDELBROT_ITERS;
-//  for (uint32_t i = 0; i < MAX_MANDELBROT_ITERS; ++i)
-//    m_colorTable[i] = 0xff000000 | (0x00ffffff - step*i);
-//  m_colorTable[MAX_MANDELBROT_ITERS] = 0xff000000;
 }
 ///////////////////////////////////////////////////////
 
@@ -74,3 +70,14 @@ MandelbrotResetBounds(double *lx,
   *rx = *ty = 1.0L;
 }
 ///////////////////////////////////////////////////////
+
+void
+MandelbrotFillLine(double lx,
+                   double dx,
+                   double y,
+                   uint32_t yix,
+                   uint32_t width,
+                   uint32_t *dst) {
+  for (uint32_t xi = 0; xi < width; ++xi, lx += dx)
+    dst[yix*width+xi] = MandelbrotGetColor(lx, y);
+}

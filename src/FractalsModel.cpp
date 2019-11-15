@@ -2,13 +2,15 @@
 #include "Mandelbrot.h"
 #include "Newton.h"
 #include "Commons.h"
-#include <omp.h>
+
+#include <chrono>
 
 FractalsModel::FractalsModel(uint32_t width,
                              uint32_t height) :
   m_width(width),
   m_height(height),
   m_data(nullptr) {
+  uint32_t w = (width + 16) & static_cast<uint32_t>(~15); //align to 16
   m_data = new uint32_t[width*height];
 }
 ///////////////////////////////////////////////////////
@@ -23,9 +25,12 @@ void
 FractalsModel::SetFractalType(FractalType t) {
   static pfResetBounds rst[] = {MandelbrotResetBounds, NewtonResetBounds};
   static pfGetColor gcl[] = {MandelbrotGetColor, NewtonGetColor};
-  m_pfResetBounds = rst[t];
+  static pfFillLine fl[] = {MandelbrotFillLine, NewtonFillLine};
+
   m_pfGetColor = gcl[t];
-  m_pfResetBounds(&m_lx, &m_rx, &m_ty, &m_by);
+  m_pfFillLine = fl[t];
+
+  rst[t](&m_lx, &m_rx, &m_ty, &m_by);
 }
 ///////////////////////////////////////////////////////
 
@@ -58,11 +63,10 @@ FractalsModel::Update() {
   double dx = (m_rx - m_lx) / m_width;
   double dy = (m_ty - m_by) / m_height;
 
+  //schedule dynamic because rows could be processed in different time
   #pragma omp parallel for schedule(dynamic, 1)
   for (uint32_t yi = 0; yi < m_height; ++yi) {
-    double x = m_lx;
-    for (uint32_t xi = 0; xi < m_width; ++xi, x += dx)
-      m_data[yi*m_width+xi] = m_pfGetColor(x, m_ty - yi*dy);
+    m_pfFillLine(m_lx, dx, m_ty-yi*dy, yi, m_width, m_data);
   }
 
   // invert colors for main axis

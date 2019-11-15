@@ -16,6 +16,13 @@ typedef void (*pfResetBounds)(double *lx,
 typedef uint32_t (*pfGetColor)(double x,
                                double y);
 
+typedef void (*pfFillLine)(double lx,
+                           double dx,
+                           double y,
+                           uint32_t yix,
+                           uint32_t width,
+                           uint32_t *dst);
+
 class FractalsModel {
 public:
   FractalsModel() = delete;
@@ -34,8 +41,11 @@ public:
 
   void Update();
 
-  uint32_t *Data(void) const {return m_data;}
-  uint32_t DataLenBytes(void) const {return m_width*m_height*sizeof(uint32_t);}
+  const uint32_t *Data(void) const {return m_data;}
+  const uint32_t *Line(uint32_t rowIx) const {return &m_data[m_width*rowIx];}
+
+  uint32_t Width(void) const {return m_width;}
+  uint32_t Height(void) const {return m_height;}
 
 private:
   uint32_t m_width;
@@ -45,8 +55,8 @@ private:
   double m_lx, m_rx; //left x, right x
   double m_ty, m_by; //top y, bottom y
 
-  pfResetBounds m_pfResetBounds; //bounds for different types of fractals are differ
   pfGetColor m_pfGetColor;
+  pfFillLine m_pfFillLine;
 };
 
 #endif // FRACTALSMODEL_H

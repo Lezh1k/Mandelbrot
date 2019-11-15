@@ -49,3 +49,14 @@ NewtonResetBounds(double *lx,
 }
 ///////////////////////////////////////////////////////
 
+void
+NewtonFillLine(double lx,
+               double dx,
+               double y,
+               uint32_t yix,
+               uint32_t width,
+               uint32_t *dst) {
+  for (uint32_t xi = 0; xi < width; ++xi, lx += dx)
+    dst[yix*width+xi] = NewtonGetColor(lx, y);
+}
+///////////////////////////////////////////////////////
