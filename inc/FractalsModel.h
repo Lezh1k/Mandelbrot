@@ -27,10 +27,8 @@ class FractalsModel {
 public:
   FractalsModel() = delete;
   FractalsModel(const FractalsModel&) = delete;
-
   FractalsModel(uint32_t width,
                 uint32_t height);
-
   ~FractalsModel();
 
   void SetFractalType(FractalType t);
@@ -40,12 +38,8 @@ public:
               bool grow);
 
   void Update();
-
-  const uint32_t *Data(void) const {return m_data;}
-  const uint32_t *Line(uint32_t rowIx) const {return &m_data[m_width*rowIx];}
-
-  uint32_t Width(void) const {return m_width;}
-  uint32_t Height(void) const {return m_height;}
+  const uint32_t *Data(void) const {return m_data;}  
+  const uint32_t *Line(uint32_t y) const {return &m_data[m_width*y];}
 
 private:
   uint32_t m_width;
@@ -55,7 +49,6 @@ private:
   double m_lx, m_rx; //left x, right x
   double m_ty, m_by; //top y, bottom y
 
-  pfGetColor m_pfGetColor;
   pfFillLine m_pfFillLine;
 };
 

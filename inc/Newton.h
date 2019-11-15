@@ -2,15 +2,15 @@
 #define NEWTON_H
 #include <stdint.h>
 
-void NewtonInitColorTable();
+struct NewtonInitializer;
+extern NewtonInitializer newtonInitializer;
 
 void NewtonResetBounds(double *lx,
                        double *rx,
                        double *ty,
                        double *by);
 
-uint32_t NewtonGetColor(double cx,
-                        double cy);
+
 
 void NewtonFillLine(double lx,
                     double dx,

@@ -4,10 +4,13 @@
 #define MAX_MANDELBROT_ITERS 0xff
 static uint32_t m_colorTable[MAX_MANDELBROT_ITERS + 1];
 
+static uint32_t getColor(double x0,
+                         double y0);
+static void initColorTable(void);
 static bool isInMainCardioid(double x, double y);
 
 void
-MandelbrotInitColorTable() {
+initColorTable() {
   double mid = static_cast<double>(MAX_MANDELBROT_ITERS);
   for (uint32_t i = 0; i < MAX_MANDELBROT_ITERS; ++i) {
     double f = sqrt(i / mid);
@@ -35,10 +38,10 @@ isInMainCardioid(double x,
 ///////////////////////////////////////////////////////
 
 uint32_t
-MandelbrotGetColor(double x0,
-                   double y0) {
-//  if (x0 < -2.5 || x0 > 1.0 || y0 < -1.0 || y0 > 1.0) //?
-//    return m_colorTable[0];
+getColor(double x0,
+         double y0) {
+  //  if (x0 < -2.5 || x0 > 1.0 || y0 < -1.0 || y0 > 1.0) //?
+  //    return m_colorTable[0];
   
   double  x, y;
   unsigned int ic = 0; //iterations count
@@ -52,8 +55,19 @@ MandelbrotGetColor(double x0,
   */
   while (x*x + y*y < 4.0 && ic < MAX_MANDELBROT_ITERS) {
     double xtmp = x*x - y*y + x0;
-    y = 2 * x*y + y0;
+    double ytmp = 2 * x*y + y0;
+
+    if (x == xtmp && y == ytmp) {
+      // do not work, because
+      //1) only the body has a cycle period of 1,
+      //2) end cycles will be reached after millions or billions of iterations,
+      //3) rounding errors end up in longer final cycles
+      ic = MAX_MANDELBROT_ITERS;
+      break;
+    }
+
     x = xtmp;
+    y = ytmp;
     ++ic;
   }
   return m_colorTable[ic];
@@ -79,5 +93,14 @@ MandelbrotFillLine(double lx,
                    uint32_t width,
                    uint32_t *dst) {
   for (uint32_t xi = 0; xi < width; ++xi, lx += dx)
-    dst[yix*width+xi] = MandelbrotGetColor(lx, y);
+    dst[yix*width+xi] = getColor(lx, y);
 }
+
+///////////////////////////////////////////////////////
+struct MandelbrotInitializer {
+  MandelbrotInitializer() {
+    initColorTable();
+  }
+  ~MandelbrotInitializer() = default;
+} mandelbrotInitializer;
+///////////////////////////////////////////////////////

@@ -3,15 +3,13 @@
 
 #include <stdint.h>
 
-void MandelbrotInitColorTable(void);
+struct MandelbrotInitializer;
+extern MandelbrotInitializer mandelbrotInitializer;
 
 void MandelbrotResetBounds(double *lx,
                            double *rx,
                            double *ty,
                            double *by);
-
-uint32_t MandelbrotGetColor(double x0,
-                            double y0);
 
 void MandelbrotFillLine(double lx,
                         double dx,

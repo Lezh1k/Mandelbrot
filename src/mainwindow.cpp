@@ -4,8 +4,8 @@
 #include <QLabel>
 #include <QMouseEvent>
 
-static const int CANVAS_W = 800;
-static const int CANVAS_H = 600;
+static const uint32_t CANVAS_W = 800;
+static const uint32_t CANVAS_H = 600;
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
   ui->setupUi(this);
   m_imgModel = new FractalsModel(CANVAS_W, CANVAS_H);
-  m_imgModel->SetFractalType(FT_NEWTON);
+  m_imgModel->SetFractalType(FT_MANDELBROT);
   ui->m_lblCanvas->installEventFilter(this);
 
   DrawImg();
@@ -42,13 +42,17 @@ MainWindow::eventFilter(QObject *watched,
   DrawImg();
   return true;
 }
+///////////////////////////////////////////////////////
 
 void
 MainWindow::DrawImg() {
   m_imgModel->Update();
-  memcpy(static_cast<void*>(m_img.bits()),
-         static_cast<const void*>(m_imgModel->Data()),
-         CANVAS_H * CANVAS_W * sizeof(uint32_t));
+  //because width in model greater then width in image
+  for (uint32_t y = 0; y < CANVAS_H; ++y) {
+    memcpy(static_cast<void*>(m_img.scanLine(static_cast<int>(y))),
+           static_cast<const void*>(m_imgModel->Line(y)),
+           static_cast<size_t>(CANVAS_W * sizeof(uint32_t)));
+  }
   ui->m_lblCanvas->setPixmap(QPixmap::fromImage(m_img));
 }
 ///////////////////////////////////////////////////////
