@@ -8,17 +8,17 @@ enum FractalType {
   FT_NEWTON
 };
 
-typedef void (*pfResetBounds)(double *lx,
-                              double *rx,
-                              double *ty,
-                              double *by) ;
+typedef void (*pfResetBounds)(long double *lx,
+                              long double *rx,
+                              long double *ty,
+                              long double *by) ;
 
-typedef uint32_t (*pfGetColor)(double x,
-                               double y);
+typedef uint32_t (*pfGetColor)(long double x,
+                               long double y);
 
-typedef void (*pfFillLine)(double lx,
-                           double dx,
-                           double y,
+typedef void (*pfFillLine)(long double lx,
+                           long double dx,
+                           long double y,
                            uint32_t yix,
                            uint32_t width,
                            uint32_t *dst);
@@ -46,8 +46,8 @@ private:
   uint32_t m_height;
   uint32_t *m_data;
 
-  double m_lx, m_rx; //left x, right x
-  double m_ty, m_by; //top y, bottom y
+  long double m_lx, m_rx; //left x, right x
+  long double m_ty, m_by; //top y, bottom y
 
   pfFillLine m_pfFillLine;
 };

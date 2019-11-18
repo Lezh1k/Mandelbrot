@@ -16,7 +16,7 @@ FractalsModel::FractalsModel(uint32_t width,
 ///////////////////////////////////////////////////////
 
 FractalsModel::~FractalsModel() {
-  delete m_data;
+  delete[] m_data;
   m_data = nullptr;
 }
 ///////////////////////////////////////////////////////
@@ -35,13 +35,13 @@ void
 FractalsModel::SetPOI(uint32_t x,
                       uint32_t y,
                       bool grow) {
-  //  double dx = p2p_distance(m_rx, m_lx) / m_width;
-  //  double dy = p2p_distance(m_ty, m_by) / m_height;
-  double dx = (m_rx - m_lx) / m_width;
-  double dy = (m_ty - m_by) / m_height;
-  double coef = grow ? 4.0 : 0.95;
+  //  long double dx = p2p_distance(m_rx, m_lx) / m_width;
+  //  long double dy = p2p_distance(m_ty, m_by) / m_height;
+  long double dx = (m_rx - m_lx) / m_width;
+  long double dy = (m_ty - m_by) / m_height;
+  long double coef = grow ? 4.0 : 0.95;
 
-  double cx0, cy0;
+  long double cx0, cy0;
   cx0 = m_lx + x*dx;
   cy0 = m_ty - y*dy;
 
@@ -55,10 +55,10 @@ FractalsModel::SetPOI(uint32_t x,
 
 void
 FractalsModel::Update() {
-  //  double dx = p2p_distance(m_rx, m_lx) / m_width;
-  //  double dy = p2p_distance(m_ty, m_by) / m_height;
-  double dx = (m_rx - m_lx) / m_width;
-  double dy = (m_ty - m_by) / m_height;
+  //  long double dx = p2p_distance(m_rx, m_lx) / m_width;
+  //  long double dy = p2p_distance(m_ty, m_by) / m_height;
+  long double dx = (m_rx - m_lx) / m_width;
+  long double dy = (m_ty - m_by) / m_height;
 
   //schedule dynamic because rows will be processed in different time
   #pragma omp parallel for schedule(dynamic, 1)

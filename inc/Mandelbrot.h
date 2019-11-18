@@ -6,14 +6,14 @@
 struct MandelbrotInitializer;
 extern MandelbrotInitializer mandelbrotInitializer;
 
-void MandelbrotResetBounds(double *lx,
-                           double *rx,
-                           double *ty,
-                           double *by);
+void MandelbrotResetBounds(long double *lx,
+                           long double *rx,
+                           long double *ty,
+                           long double *by);
 
-void MandelbrotFillLine(double lx,
-                        double dx,
-                        double y,
+void MandelbrotFillLine(long double lx,
+                        long double dx,
+                        long double y,
                         uint32_t yix,
                         uint32_t width,
                         uint32_t *dst);
